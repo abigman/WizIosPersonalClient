@@ -225,8 +225,6 @@ static WizSettings* defaultSettings = nil;
 }
 - (NSURL*) wizServerUrl
 {
-    
-//    return [[[NSURL alloc] initWithString:@"http://192.168.1.111:8888/wiz/xmlrpc"] autorelease];
     return [[[NSURL alloc] initWithString:@"http://service.wiz.cn/wizkm/xmlrpc"] autorelease];
 }
 //

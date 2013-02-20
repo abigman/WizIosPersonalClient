@@ -31,13 +31,14 @@
 #import "WizPadEditViewControllerM5.h"
 
 #define WizAbs(x) x>0?x:-x
-@interface WizAppDelegate()
+@interface WizAppDelegate() <UIAlertViewDelegate>
 {
     UILabel* syncLabel;
 }
 @property (nonatomic, retain) UILabel* syncLabel;
 @end
 
+static NSString* const WizStrNotWillShowTranseToNewApp = @"asdhfahsdjlkfhasdjkfhlaskdhf";
 @implementation WizAppDelegate
 @synthesize syncLabel;
 @synthesize window;
@@ -49,6 +50,24 @@
 }
 #pragma mark -
 #pragma mark Application lifecycle
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/cn/app/id599493807"]];
+    }
+    if (buttonIndex == 2) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:WizStrNotWillShowTranseToNewApp];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+- (void) alertUserToUseNewWizNoteIphone
+{
+    BOOL willShowAlert = [[NSUserDefaults standardUserDefaults] boolForKey:WizStrNotWillShowTranseToNewApp];
+    if (!willShowAlert) {
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Use WizNote for iPhone", nil) message:NSLocalizedString(@"WizNote for iPhone is an enhanced version of WizNote.Add group function on the basis of personal notes,it make teamwork comfortably, New lightweight architecture design bring stability, rapid operation experience.", nil) delegate:self cancelButtonTitle:WizStrCancel otherButtonTitles:WizStrOK, NSLocalizedString(@"Never show again", nil), nil];
+        [alertView show];
+    }
+}
 
 - (void) tryResumeLastEdition
 {
@@ -141,6 +160,9 @@ void UncaughtExceptionHandler(NSException *exception)
     NSSetUncaughtExceptionHandler (&UncaughtExceptionHandler);
     
     [self initRootNavigation];
+    if (![WizGlobals WizDeviceIsPad]) {
+        [self alertUserToUseNewWizNoteIphone];
+    }
     return YES;
 }
 

@@ -7,6 +7,7 @@
 //
 #import "WizSegmentTableViewControllerBase.h"
 #import "WizSegmentedViewController.h"
+#import "WizPadAllNotesViewController.h"
 #define WizSegmentViewChangedDurationTime  0.5
 #define WizSegmentItemWidth                 80
 
@@ -157,12 +158,18 @@
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    if ([self.selectedViewController isKindOfClass:[WizPadAllNotesViewController class]]) {
+        return;
+    }
     [self.selectedViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    if ([self.selectedViewController isKindOfClass:[WizPadAllNotesViewController class]]) {
+        return;
+    }
     [self.selectedViewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
 

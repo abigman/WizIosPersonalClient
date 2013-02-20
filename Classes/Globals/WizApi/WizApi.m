@@ -610,7 +610,16 @@
             [self.apiManagerDelegate didChangedStatue:self statue:WizSyncStatueError];
         }
         else {
-            [WizGlobals reportError:retObject];
+            if ([retObject isKindOfClass:[NSError class]]) {
+                NSError* error = (NSError*)retObject;
+                if (error.code == 399 && [error.localizedDescription isEqualToString:@"Lack of timestamp"]) {
+                    [self.apiManagerDelegate didApiSyncError:self error:[WizGlobalError tokenUnActiveError]];
+                }
+                else
+                {
+                    [WizGlobals reportError:retObject];
+                }
+            }
         }
 	}
 }

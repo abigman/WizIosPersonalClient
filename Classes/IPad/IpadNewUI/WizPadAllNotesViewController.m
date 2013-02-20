@@ -358,6 +358,7 @@ enum WizPadTreeKeyIndex
 {
 	return UIInterfaceOrientationIsLandscape(interfaceOrientation);
 }
+
 //
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
