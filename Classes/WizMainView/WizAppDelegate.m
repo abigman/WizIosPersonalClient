@@ -31,6 +31,29 @@
 #import "WizPadEditViewControllerM5.h"
 
 #define WizAbs(x) x>0?x:-x
+
+@interface MyNavigationController : UINavigationController
+
+@end
+
+@implementation MyNavigationController
+
+- (BOOL) shouldAutorotate
+{
+    return [self.viewControllers.lastObject shouldAutorotate];
+}
+
+- (NSUInteger) supportedInterfaceOrientations
+{
+    return [self.viewControllers.lastObject supportedInterfaceOrientations];
+}
+
+- (UIInterfaceOrientation) preferredInterfaceOrientationForPresentation
+{
+    return [self.viewControllers.lastObject preferredInterfaceOrientationForPresentation];
+}
+@end
+
 @interface WizAppDelegate() <UIAlertViewDelegate>
 {
     UILabel* syncLabel;
@@ -129,7 +152,7 @@ void UncaughtExceptionHandler(NSException *exception)
 
 - (void) initRootNavigation
 {
-    UINavigationController* root = [[UINavigationController alloc] init];
+    MyNavigationController* root = [[MyNavigationController alloc] init];
     if ([WizGlobals WizDeviceIsPad])
     {
         WizPadLoginViewController* pad = [[WizPadLoginViewController alloc] init];

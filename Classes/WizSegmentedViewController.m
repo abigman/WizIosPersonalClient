@@ -47,32 +47,32 @@
     [toViewController viewWillAppear:YES];
     //
     
-    UIInterfaceOrientation fromInterfaceOrientation = toViewController.interfaceOrientation;
-    UIInterfaceOrientation toInterfaceOrientation = [[UIDevice currentDevice] orientation];
-    
-    if (fromInterfaceOrientation != toInterfaceOrientation )
-    {
-        if (![self shouldAutorotateToInterfaceOrientation:toInterfaceOrientation]) {
-            if ([toViewController shouldAutorotateToInterfaceOrientation:UIInterfaceOrientationPortrait])
-            {
-                toInterfaceOrientation = UIInterfaceOrientationPortrait;
-            }
-            else if ([toViewController shouldAutorotateToInterfaceOrientation:UIInterfaceOrientationPortraitUpsideDown])
-            {
-                toInterfaceOrientation = UIInterfaceOrientationPortraitUpsideDown;
-            }
-            else if ([toViewController shouldAutorotateToInterfaceOrientation:UIInterfaceOrientationLandscapeLeft])
-            {
-                toInterfaceOrientation = UIInterfaceOrientationLandscapeLeft;
-            }
-            else if ([toViewController shouldAutorotateToInterfaceOrientation:UIInterfaceOrientationLandscapeRight])
-            {
-                toInterfaceOrientation = UIInterfaceOrientationLandscapeRight;
-            }
-        }
-        [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)toInterfaceOrientation];
-    }
-    
+//    UIInterfaceOrientation fromInterfaceOrientation = toViewController.interfaceOrientation;
+//    UIInterfaceOrientation toInterfaceOrientation = [[UIDevice currentDevice] orientation];
+//    
+//    if (fromInterfaceOrientation != toInterfaceOrientation )
+//    {
+//        if (![self shouldAutorotateToInterfaceOrientation:toInterfaceOrientation]) {
+//            if ([toViewController shouldAutorotateToInterfaceOrientation:UIInterfaceOrientationPortrait])
+//            {
+//                toInterfaceOrientation = UIInterfaceOrientationPortrait;
+//            }
+//            else if ([toViewController shouldAutorotateToInterfaceOrientation:UIInterfaceOrientationPortraitUpsideDown])
+//            {
+//                toInterfaceOrientation = UIInterfaceOrientationPortraitUpsideDown;
+//            }
+//            else if ([toViewController shouldAutorotateToInterfaceOrientation:UIInterfaceOrientationLandscapeLeft])
+//            {
+//                toInterfaceOrientation = UIInterfaceOrientationLandscapeLeft;
+//            }
+//            else if ([toViewController shouldAutorotateToInterfaceOrientation:UIInterfaceOrientationLandscapeRight])
+//            {
+//                toInterfaceOrientation = UIInterfaceOrientationLandscapeRight;
+//            }
+//        }
+//        [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)toInterfaceOrientation];
+//    }
+//    
     toViewController.view.frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, self.view.frame.size.height);
     [self.view addSubview:toViewController.view];
     [toViewController viewDidAppear:YES];
@@ -158,19 +158,28 @@
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-    if ([self.selectedViewController isKindOfClass:[WizPadAllNotesViewController class]]) {
-        return;
-    }
     [self.selectedViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    if ([self.selectedViewController isKindOfClass:[WizPadAllNotesViewController class]]) {
-        return;
-    }
     [self.selectedViewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+}
+
+- (BOOL) shouldAutorotate
+{
+    return YES;
+}
+
+- (NSUInteger) supportedInterfaceOrientations
+{
+        return UIInterfaceOrientationMaskAll;
+}
+
+- (UIInterfaceOrientation) preferredInterfaceOrientationForPresentation
+{
+    return UIInterfaceOrientationMaskLandscape;
 }
 
 - (void) viewWillAppear:(BOOL)animated

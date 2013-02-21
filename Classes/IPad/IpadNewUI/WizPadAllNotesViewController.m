@@ -379,16 +379,16 @@ enum WizPadTreeKeyIndex
     }
     else
     {
-        
+        NSInteger count = UIInterfaceOrientationIsLandscape(self.interfaceOrientation)?3:2;
         if (0 ==  [self.documentsMutableArray count]) {
             return 0;
         }
         NSArray* sectionArray = [self.documentsMutableArray objectAtIndex:section];
-        if ([sectionArray count]%3>0) {
-            return  [sectionArray count]/3+1;
+        if ([sectionArray count]%count>0) {
+            return  [sectionArray count]/count+1;
         }
         else {
-            return [sectionArray count]/3  ;
+            return [sectionArray count]/count;
         }
     }
 }
@@ -432,7 +432,8 @@ enum WizPadTreeKeyIndex
             cell = [[[WizPadListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier detailViewSize:detailSize] autorelease];
             cell.selectedDelegate = self;
         }
-        NSUInteger documentsCount=3;
+        NSUInteger documentsCount= UIInterfaceOrientationIsLandscape(self.interfaceOrientation)?3:2;
+        
         NSUInteger needLength = documentsCount*(indexPath.row+1);
         NSArray* sectionArray = [self.documentsMutableArray objectAtIndex:indexPath.section];
         NSArray* cellArray=nil;
@@ -443,8 +444,6 @@ enum WizPadTreeKeyIndex
         else {
             docRange = NSMakeRange(documentsCount*indexPath.row, documentsCount);
         }
-        NSLog(@"document count is %d  docRange %d %d  row is %d",[sectionArray count], docRange.location, docRange.length, indexPath.row);
-        
         cellArray = [sectionArray subarrayWithRange:docRange];
         cell.documents = cellArray;
         [cell updateDoc];
@@ -902,6 +901,35 @@ enum WizPadTreeKeyIndex
             [self addNodeFromRootNode:self.lastSelectedTreeNode title:title];
         }
     }
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) {
+        masterTableView.frame = CGRectMake(0.0, 0.0, 320, 768 - 108);
+        detailTableView.frame = CGRectMake(320, 0.0, 1024-320, 768 - 108);
+    }
+    else
+    {
+        masterTableView.frame = CGRectMake(0.0, 0.0, 320, 1024 - 108);
+        detailTableView.frame = CGRectMake(320, 0.0, 768-320, 1024 -108);
+    }
+}
+- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    NSLog(@"self orientation is %d",self.interfaceOrientation);
+    if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) {
+        masterTableView.frame = CGRectMake(0.0, 0.0, 320, 768 - 108);
+        detailTableView.frame = CGRectMake(320, 0.0, 1024-320, 768 - 108);
+    }
+    else
+    {
+        masterTableView.frame = CGRectMake(0.0, 0.0, 320, 1024 - 108);
+        detailTableView.frame = CGRectMake(320, 0.0, 768-320, 1024 -108);
+    }
+    [self.detailTableView reloadData];
 }
 
 
